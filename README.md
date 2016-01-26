@@ -38,3 +38,79 @@ SiteSetting.sso_overrides_name = true
 SiteSetting.sso_overrides_email= true
 ```
 
+## Import from v5
+
+Loading the v5 database
+sudo -u postgres createdb c2corg
+sudo -u postgres psql -d c2corg < c2corg_v5_dump.sql
+
+Add missing columns:
+```
+ALTER TABLE punbb_topics ADD COLUMN first_post_id integer default 0;
+UPDATE punbb_topics SET first_post_id = (select MIN(p.id) from punbb_posts as p where punbb_topics.id = p.topic_id);
+```
+
+A discourse installation in developer mode is required:
+https://github.com/discourse/discourse/blob/master/docs/DEVELOPER-ADVANCED.md
+
+```
+git clone git@github.com:c2corg/discourse
+cd discourse
+gem install bundle --user-install
+bundle install --path ~/gempath
+```
+
+A database user with enough rights is necessary:
+`sudo -u postgres createuser -s -P  discourse_import`
+
+Tables need to be created:
+`PGHOSTADDR=127.0.0.1 PGUSER=discourse_import  PGPASSWORD=discourse_import bundle exec rake db:create db:migrate`
+
+
+
+Migration:
+`DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development bundle exec ruby  script/import_scripts/punbb.rb`
+
+
+## Testing (with standalone, non sso instance)
+
+Set 'c2cc2cc2c' password to everyone:
+```
+update set password_hash = 'a9f9571107c43a7554293c0537beb0a6467863204b3420bee464da165fc690b6', salt = '7b5e9c84645272ade56967e0db501f69';
+```
+
+Activate all emails:
+`update email_tokens set confirmed = true;`
+
+Promote a user admin:
+`update users set admin = true where username = 'XXX';`
+
+Promote a user moderator:
+`update users set moderator = true where username = 'XXX';`
+
+
+# Restore discourse data (for testing)
+See https://meta.discourse.org/t/advanced-manual-method-of-manually-creating-and-restoring-discourse-backups/18273
+
+Save:
+```
+sudo -u postgres psql -d discourse_development -f backup.sql
+```
+
+
+Restore:
+```
+sudo -u postgres psql discourse_development <<END
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+ALTER SCHEMA public OWNER TO discourse_import;
+CREATE EXTENSION IF NOT EXISTS hstore;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+END
+
+sudo -u postgres psql -d discourse_development -f backup.sql
+```
+
+
+# Launch dev on 0.0.0.0
+`PGHOSTADDR=127.0.0.1 PGUSER=discourse_import  PGPASSWORD=discourse_import bundle exec rails server -b 0.0.0.0 -p 3000`
