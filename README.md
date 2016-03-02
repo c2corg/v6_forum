@@ -19,12 +19,24 @@ There are two paths to authenticate, depending on the domain where :
   - an iframe is created to have the forum set its cookies, a user is automatically created in discourse;
   - the user is logged on the UI and the forum; the user is redirected to some UI page.
 
+There are two paths to logout:
+- Initiated by the forum:
+  - the user clicks the "Log Out" button;
+  - discourse redirects to the UI passing the '?logout' parameter;
+  - the UI forget the token and redirect back to the forum using the referrer.
+- Initiated by the UI:
+  - a request is sent by Angular to the API;
+  - the token is invalidated;
+  - a logout request is sent by the API to the forum;
+  - the user is logged out of the forum and the UI.
+
 ## Configuration
 
 This is done in the discours administration page, with:
 ```
 SiteSetting.enable_sso = true
 SiteSetting.sso_url = "https://c2corgv6.demo-camptocamp.com/auth"
+SiteSetting.logout_redirect = 'https://c2corgv6.demo-camptocamp.com/auth?logout'
 SiteSetting.sso_secret="some secret string"
 ```
 
