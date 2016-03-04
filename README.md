@@ -88,7 +88,7 @@ Migration:
 
 Set 'c2cc2cc2c' password to everyone:
 ```
-update set password_hash = 'a9f9571107c43a7554293c0537beb0a6467863204b3420bee464da165fc690b6', salt = '7b5e9c84645272ade56967e0db501f69';
+update users set password_hash = 'a9f9571107c43a7554293c0537beb0a6467863204b3420bee464da165fc690b6', salt = '7b5e9c84645272ade56967e0db501f69';
 ```
 
 Activate all emails:
