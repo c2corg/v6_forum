@@ -53,8 +53,10 @@ SiteSetting.sso_overrides_email= true
 ## Import from v5
 
 Loading the v5 database
+```
 sudo -u postgres createdb c2corg
 sudo -u postgres psql -d c2corg < c2corg_v5_dump.sql
+```
 
 Add missing columns:
 ```
@@ -73,15 +75,25 @@ bundle install --path ~/gempath
 ```
 
 A database user with enough rights is necessary:
-`sudo -u postgres createuser -s -P  discourse_import`
+```
+sudo -u postgres createuser -s -P discourse_import
+```
+
+A database must be chosen:
+Modify `config/database.yml` then export the database name.
+```
+export THEDB="discourse_development"
+```
 
 Tables need to be created:
-`PGHOSTADDR=127.0.0.1 PGUSER=discourse_import  PGPASSWORD=discourse_import bundle exec rake db:create db:migrate`
-
-
+```
+PGHOSTADDR=127.0.0.1 PGUSER=discourse_import  PGPASSWORD=discourse_import bundle exec rake db:create db:migrate
+```
 
 Migration:
-`DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development bundle exec ruby  script/import_scripts/punbb.rb`
+```
+DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/$THEDB bundle exec ruby script/import_scripts/punbb.rb
+```
 
 
 ## Testing (with standalone, non sso instance)
