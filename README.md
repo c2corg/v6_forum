@@ -138,3 +138,28 @@ sudo -u postgres psql -d discourse_development -f backup.sql
 
 # Launch dev on 0.0.0.0
 `PGHOSTADDR=127.0.0.1 PGUSER=discourse_import  PGPASSWORD=discourse_import bundle exec rails server -b 0.0.0.0 -p 3000`
+
+
+
+# Setup discourse_development_full instance
+
+Instructions to set up the full instance on the demo server.
+The full instance contains the whole import from punbb.
+It uses database discourse_development_full and runs outside docker.
+
+git clone git@github.com:c2corg/discourse discourse_import
+Change database in config/database.yml to discourse_development_full
+
+DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec rake db:create db:migrate
+DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec ruby script/import_scripts/punbb.rb
+
+Create an admin account
+DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec rake admin:create
+
+Run with
+DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec rails server -b 0.0.0.0 -p 2000
+
+Open http://c2corgv6-demo.gis.internal:2000
+
+
+(delete database: DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full  bundle exec rake db:purge:all && bundle exec rake db:create db:migrate)
