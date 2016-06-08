@@ -37,7 +37,7 @@ This is done in the discours administration page, with:
 SiteSetting.enable_sso = true
 SiteSetting.sso_url = "https://c2corgv6.demo-camptocamp.com/auth"
 SiteSetting.logout_redirect = 'https://c2corgv6.demo-camptocamp.com/auth?logout'
-SiteSetting.sso_secret="some secret string"
+SiteSetting.sso_secret="see api configuration"
 ```
 
 Users are automatically created in discourse, from the information provided
