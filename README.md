@@ -50,6 +50,11 @@ SiteSetting.sso_overrides_name = true
 SiteSetting.sso_overrides_email= true
 ```
 
+In case the admin interface is not available, the command line can be used:
+```
+RAILS_ENV=development bundle exec rails c
+```
+
 ## Import from v5
 
 Loading the v5 database
