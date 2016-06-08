@@ -163,3 +163,20 @@ Open http://c2corgv6-demo.gis.internal:2000
 
 
 (delete database: DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full  bundle exec rake db:purge:all && bundle exec rake db:create db:migrate)
+
+
+See https://meta.discourse.org/t/advanced-manual-method-of-manually-creating-and-restoring-discourse-backups/18273
+
+Dump and restore from full instance to dockerized instance
+- Dump full instance
+
+
+- Restore
+
+
+- Create admin user and setup sso
+su - discourse
+cd /var/www/discourse
+RAILS_ENV=production bundle exec rake admin:create
+
+- Generate a new API key then update in the database with the secret one.
