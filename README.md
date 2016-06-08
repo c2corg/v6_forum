@@ -152,13 +152,16 @@ Instructions to set up the full instance on the demo server.
 The full instance contains the whole import from punbb.
 It uses database discourse_development_full and runs outside docker.
 
+```
 git clone git@github.com:c2corg/discourse discourse_import
 Change database in config/database.yml to discourse_development_full
 
 DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec rake db:create db:migrate
 DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec ruby script/import_scripts/punbb.rb
+```
 
 Create an admin account
+```
 DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full bundle exec rake admin:create
 
 Run with
@@ -168,7 +171,7 @@ Open http://c2corgv6-demo.gis.internal:2000
 
 
 (delete database: DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/discourse_development_full  bundle exec rake db:purge:all && bundle exec rake db:create db:migrate)
-
+```
 
 See https://meta.discourse.org/t/advanced-manual-method-of-manually-creating-and-restoring-discourse-backups/18273
 
@@ -180,8 +183,10 @@ Dump and restore from full instance to dockerized instance
 
 
 - Create admin user and setup sso
+```
 su - discourse
 cd /var/www/discourse
 RAILS_ENV=production bundle exec rake admin:create
+```
 
 - Generate a new API key then update in the database with the secret one.
