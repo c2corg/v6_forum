@@ -190,3 +190,46 @@ RAILS_ENV=production bundle exec rake admin:create
 ```
 
 - Generate a new API key then update in the database with the secret one.
+
+
+# Import script remote debugging with Eclipse
+
+## On server part, install ruby debug tools
+
+In discourse/Gemfile add this lines :
+```
+gem 'debase'
+gem 'ruby-debug-ide'
+```
+
+Run ``bundle install``
+
+## On your workstation, prepare Eclipse
+
+I recommend to use a specific Eclipse installation for Ruby since Aptana Studio 3 is incompatible with some other language plugins like PyDev.
+
+Install plugins :
+
+- Remote System Explorer (from standard update site for your eclipse version)
+- Aptana Studio 3 (http://download.aptana.com/studio3/plugin/install)
+
+Open the Remote System Explorer perspective.
+
+In Remote Systems view, add a connection to your remote server.
+
+Open Run / Debug Configuration and create a new 'Remote Ruby Debug Session'.
+
+## Debug import script with Eclipse
+
+Run script with rdebug-ide
+```
+export THEDB="discourse_amorvan"
+export DATABASE_URL=postgres://discourse_import:discourse_import@127.0.0.1/$THEDB
+
+bundle exec rdebug-ide --host 0.0.0.0 --port 7000 --stop -- ./script/import_scripts/punbb.rb
+```
+--stop option will pause execution on the first line, giving you the time to connect with Eclipse.
+
+Run the configured 'Remote Ruby Debug Session' in Eclipse.
+
+For now I open ruby files in Eclipse before running the debug session since I have not configured Eclipse to find files itself on the remote server.
