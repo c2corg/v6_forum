@@ -35,8 +35,8 @@ There are two paths to logout:
 This is done in the discours administration page, with:
 ```
 SiteSetting.enable_sso = true
-SiteSetting.sso_url = "https://c2corgv6.demo-camptocamp.com/auth"
-SiteSetting.logout_redirect = 'https://c2corgv6.demo-camptocamp.com/auth?logout'
+SiteSetting.sso_url = "https://c2corgv6.demo-camptocamp.com/auth-sso"
+SiteSetting.logout_redirect = 'https://c2corgv6.demo-camptocamp.com/auth-sso?logout'
 SiteSetting.sso_secret="see api configuration"
 ```
 
